@@ -1,7 +1,6 @@
 from re import MULTILINE
 import mysql.connector
-import json
-import time
+
 
 mydb = mysql.connector.connect(
     host="localhost", user="root", password="", autocommit="True"
