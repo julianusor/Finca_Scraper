@@ -1,13 +1,11 @@
 import requests
-from requests.api import get
+
 import database as db
-from os import system
+
 from bs4 import BeautifulSoup
 import re
 import json
 import requests
-import concurrent.futures
-
 initiation = db.initiate()
 
 
