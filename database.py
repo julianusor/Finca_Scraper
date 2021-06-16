@@ -142,10 +142,8 @@ def is_table(tablename, createtable):
 
 
 def is_in_db(propid):
-    "checks if id is in table"
+    '''checks if id is in table'''
 
-
-    
     mycursor.execute(f"SELECT * FROM `property` WHERE id = '{propid}'")
     
     myresult = mycursor.fetchall()
@@ -159,16 +157,19 @@ def is_in_db(propid):
 def add_new(d):
     '''adds a new record'''
 
-
-    sql = f"INSERT INTO `property` (`Id`, `CategoryId`, `DepartmentId`, `CityId`, `AgeId`, `Price`, `Surface`, `Area`, `Rooms`, `Baths`, `Stratum`, `Garages`, `Latitude`, `Longitude`) VALUES ('{d[0]}', '{d[1]}', '{d[2]}', '{d[3]}', '{d[4]}', '{d[5]}', '{d[6]}', '{d[7]}', '{d[8]}', '{d[9]}', '{d[10]}', '{d[11]}', '{d[12]}', '{d[13]}')"
+    try:
+        sql = f"INSERT INTO `property` (`Id`, `CategoryId`, `DepartmentId`, `CityId`, `AgeId`, `Price`, `Surface`, `Area`, `Rooms`, `Baths`, `Stratum`, `Garages`, `Latitude`, `Longitude`) VALUES ('{d[0]}', '{d[1]}', '{d[2]}', '{d[3]}', '{d[4]}', '{d[5]}', '{d[6]}', '{d[7]}', '{d[8]}', '{d[9]}', '{d[10]}', '{d[11]}', '{d[12]}', '{d[13]}')"
     
-    mycursor.execute(sql)
-    mydb.commit()
+        mycursor.execute(sql)
+        mydb.commit()
+    except mysql.connector.Error as err:
+        print("Something went wrong: {}".format(err))
+
     return True
 
 
 def initiate():
-    "starts the scraper"
+    '''starts the scraper'''
     existsdb = is_database()
     if not existsdb:
         mycursor.execute(f"CREATE DATABASE {dbname}")

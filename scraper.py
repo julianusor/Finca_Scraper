@@ -1,7 +1,8 @@
 import requests
 
 import database as db
-
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from bs4 import BeautifulSoup
 import re
 import json
@@ -25,7 +26,7 @@ def get_full_data(pid):
     url = f"https://www.fincaraiz.com.co/detail.aspx?a={pid}"
 
     r = requests.get(url=url)
-
+    
     data = r.text
 
     soup = BeautifulSoup(data, "lxml")
@@ -33,6 +34,7 @@ def get_full_data(pid):
     scripts = soup.find_all("script")
 
     for script in scripts:
+        
 
         sc = re.findall(r"var sfAdvert = (.*);", str(script))
         if len(sc) > 0:
@@ -54,7 +56,6 @@ def get_full_data(pid):
                 datajson["Longitude"],
             )
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 
@@ -95,28 +96,18 @@ def start_scraping(choice):
                             discarded = discarded + 1
                         else:
                             links_to_call.append(p[0])
-
-
-                            # db.add_new(new_data)
-
-
-
-                        # if result:
-                        #     added = added + 1
-                        # else:
-                        #     discarded = discarded + 1
-                        # print(f"New added: {added}, Discarded: {discarded}")
-                    
                         
-                    threads = []
-                    i = 0
-                    with ThreadPoolExecutor(max_workers=8) as executor:
-                        for url in links_to_call:
+                    
+                    i = 0 
+                    with ThreadPoolExecutor(max_workers=1) as executor:
+                        threads = []
+                        for url in links_to_call: 
                             threads.append(executor.submit(get_full_data, url))
                             
                         for task in as_completed(threads):
                             added = added + 1
                             print(f"New added: {added}, Discarded: {discarded}")
+
                             add_new(task.result())
                         
                 else:
