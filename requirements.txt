@@ -1,3 +1,5 @@
 mysql
+mysql-connector
 requests
 BeautifulSoup4
+lxml

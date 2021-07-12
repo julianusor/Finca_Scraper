@@ -99,7 +99,13 @@ def start_scraping(choice):
                         
                     
                     i = 0 
-                    with ThreadPoolExecutor(max_workers=1) as executor:
+
+                    # for id in links_to_call:
+                    #     get_full_data(id)
+
+                    #     print("Added")
+
+                    with ThreadPoolExecutor(max_workers=8) as executor:
                         threads = []
                         for url in links_to_call: 
                             threads.append(executor.submit(get_full_data, url))
